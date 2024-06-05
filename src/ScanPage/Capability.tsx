@@ -1,7 +1,7 @@
 import React, { ChangeEvent, useEffect, useRef, useState } from 'react'
 import Dynamsoft from 'dwt'
 import { WebTwain } from 'dwt/dist/types/WebTwain'
-import { key } from "./license.ts";
+import { key,resourcesPath } from "./environment.ts";
 import "./Capability.css"
 import { Capabilities, CapabilityDetails, CapabilitySetup, Device, ValueAndLabel } from 'dwt/dist/types/WebTwain.Acquire';
 import { DynamsoftEnumsDWT } from 'dwt/dist/types/Dynamsoft.Enum';
@@ -76,7 +76,7 @@ export default function Capability() {
     useEffect(() => {
         Dynamsoft.DWT.AutoLoad = false;
         Dynamsoft.DWT.UseDefaultViewer = true;
-        Dynamsoft.DWT.ResourcesPath = "https://unpkg.com/dwt@latest/dist";
+        Dynamsoft.DWT.ResourcesPath = resourcesPath;
         Dynamsoft.DWT.ProductKey = key;
         Dynamsoft.DWT.UseLocalService = true;
         Dynamsoft.DWT.Containers = [

@@ -1,0 +1,2 @@
+export const key='t0116QAEAABkDZBSlXKJWoG0XxdbrsGP64MUrw0fh1tF41GO6H7ux4cozLq9xGw3Z/NH5EFUSgfGg/f+7tGn3g+C/PWLpBKTtYbw9jRmnBfaLwVaWVh2Y+cnsLab+yJ+cWmkwZWpMcHIx3VuU+JbDSCcETyKBQXE=';// https://www.dynamsoft.com/customer/license/trialLicense?product=dwt  Apply for a 30-day free trial license
+export const resourcesPath='https://unpkg.com/dwt@latest/dist'; //You can deploy static resources(node_modules/dwt/dist) to your own site.Note:The path of a static resource can also be a relative path

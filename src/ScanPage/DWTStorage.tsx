@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import Dynamsoft from 'dwt'
 import { WebTwain } from 'dwt/dist/types/WebTwain'
 import { ImageEditor } from 'dwt/dist/types/WebTwain.Viewer';
-import { key } from "./license.ts";
+import { key,resourcesPath } from "./environment.ts";
 import { BufferChangeInfo } from 'dwt/dist/types/WebTwain.Util';
 export default function DWTStorage() {
     interface StorageInfo {
@@ -20,7 +20,7 @@ export default function DWTStorage() {
     useEffect(() => {
         Dynamsoft.DWT.AutoLoad = false;
         Dynamsoft.DWT.UseDefaultViewer = true;
-        Dynamsoft.DWT.ResourcesPath = "https://unpkg.com/dwt@latest/dist";
+        Dynamsoft.DWT.ResourcesPath = resourcesPath;
         Dynamsoft.DWT.ProductKey = key;
         Dynamsoft.DWT.UseLocalService = true;
         Dynamsoft.DWT.Containers = [
