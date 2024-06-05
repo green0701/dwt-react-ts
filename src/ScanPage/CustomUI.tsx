@@ -28,7 +28,7 @@ export default function CustomUI() {
     useEffect(() => {
         Dynamsoft.DWT.AutoLoad = false;
         Dynamsoft.DWT.UseDefaultViewer = true;
-        Dynamsoft.DWT.ResourcesPath = "/dwt-resources";
+        Dynamsoft.DWT.ResourcesPath = "https://unpkg.com/dwt@latest/dist";
         Dynamsoft.DWT.ProductKey = key;
         Dynamsoft.DWT.UseLocalService = true;
         

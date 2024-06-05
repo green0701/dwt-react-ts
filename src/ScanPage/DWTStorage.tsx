@@ -20,7 +20,7 @@ export default function DWTStorage() {
     useEffect(() => {
         Dynamsoft.DWT.AutoLoad = false;
         Dynamsoft.DWT.UseDefaultViewer = true;
-        Dynamsoft.DWT.ResourcesPath = "/dwt-resources";
+        Dynamsoft.DWT.ResourcesPath = "https://unpkg.com/dwt@latest/dist";
         Dynamsoft.DWT.ProductKey = key;
         Dynamsoft.DWT.UseLocalService = true;
         Dynamsoft.DWT.Containers = [
@@ -144,6 +144,7 @@ export default function DWTStorage() {
 
     return (
         <>
+            <input type='text' placeholder=''></input>
             <button onClick={() => {removeCurrentStorage()}}>RemoveLocalStorage</button>
             <button onClick={() => { acquireImage() }}>Scan</button>
             <button onClick={() => { showImageEditor() }}>showImageEditor</button>

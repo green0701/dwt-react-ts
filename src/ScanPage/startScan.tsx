@@ -21,6 +21,7 @@ export default function StartScan() {
             resolution:200,
             bFeeder:false,
             bDuplex:false,
+
         },
         ui:{
             bShowUI:false
@@ -34,7 +35,7 @@ export default function StartScan() {
     useEffect(() => {
         Dynamsoft.DWT.AutoLoad = false;
         Dynamsoft.DWT.UseDefaultViewer = true;
-        Dynamsoft.DWT.ResourcesPath = "/dwt-resources";
+        Dynamsoft.DWT.ResourcesPath = "https://unpkg.com/dwt@latest/dist";
         Dynamsoft.DWT.ProductKey = key;
         Dynamsoft.DWT.Containers = [
             {

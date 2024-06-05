@@ -76,7 +76,7 @@ export default function Capability() {
     useEffect(() => {
         Dynamsoft.DWT.AutoLoad = false;
         Dynamsoft.DWT.UseDefaultViewer = true;
-        Dynamsoft.DWT.ResourcesPath = "/dwt-resources";
+        Dynamsoft.DWT.ResourcesPath = "https://unpkg.com/dwt@latest/dist";
         Dynamsoft.DWT.ProductKey = key;
         Dynamsoft.DWT.UseLocalService = true;
         Dynamsoft.DWT.Containers = [
@@ -400,7 +400,15 @@ export default function Capability() {
             else if (capDetail?.conType?.value == 3) {
                 //TWON_ARRAY
                 return <td><input type="text" defaultValue={JSON.stringify(capDetail?.values)} onChange={(e) => {
-                    addModifyCapability(capDetail, SetCapKey.values, JSON.parse(e.target.value))
+                    try
+                    {
+                        addModifyCapability(capDetail, SetCapKey.values, JSON.parse(e.target.value))
+                    }
+                    catch(e)
+                    {
+                        
+                    }
+                    
                 }} /></td>
             }
             else if (capDetail?.conType?.value == 4) {
