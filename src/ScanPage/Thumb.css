@@ -1,5 +1,5 @@
 .dwtContainer {
-    height: 1000px;
+    height: 600px;
     background-color: #dadada;
     display: flex;
 }
@@ -9,6 +9,7 @@
     flex-wrap: wrap;
     overflow-y: scroll;
     width: 200px;
+    /* background-color: honeydew; */
 }
 
 img.highlightImg {

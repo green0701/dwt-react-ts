@@ -28,8 +28,8 @@ export default function Thumb() {
             {
                 WebTwainId: "dwtObject",
                 ContainerId: containerId,
-                Width: 800,
-                Height: 1000
+                Width: 400,
+                Height: 600
             },
         ];
         Dynamsoft.DWT.RegisterEvent("OnWebTwainReady", () => {
