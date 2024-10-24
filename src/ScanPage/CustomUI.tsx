@@ -5,11 +5,11 @@ import { key ,resourcesPath} from "./environment.ts";
 import { Device } from 'dwt/dist/types/WebTwain.Acquire';
 import { DynamsoftEnumsDWT } from 'dwt/dist/types/Dynamsoft.Enum';
 export default function CustomUI() {
-    let DWObject = useRef<WebTwain | null>(null);
+    let DWObject = useRef<WebTwain>(null!);
     const containerId = "dwtcontrolContainer"
     interface DeviceState {
-        deviceList?: Device[];
-        selectSourceIndex?: number;
+        deviceList: Device[];
+        selectSourceIndex: number;
         currenSourceName?: string;
         nomalDevice?: boolean;
         esclDevice?: boolean;
@@ -88,7 +88,6 @@ export default function CustomUI() {
     function handleDeviceTypeChange(e: ChangeEvent<HTMLInputElement>) {
         const { name, checked } = e.target;
         console.log(1)
-        deviceState[name] = checked;
         let deviceTypeValue = 0;
         if (deviceState.nomalDevice) {
             deviceTypeValue |= 0x10 | 0x20 | 0x40 | 0x80 | 0x100; 

@@ -16,7 +16,7 @@ export default function ScanPage() {
             IfShowUI:boolean,
         }
     }
-    const DWObjectRef = useRef<WebTwain | null>(null);
+    const DWObjectRef = useRef<WebTwain>(null!);
     let imageEditor: ImageEditor;
     const containerId = "dwtcontrolContainer"
     const [state, setState] = useState<DWTState>({

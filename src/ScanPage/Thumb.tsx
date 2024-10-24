@@ -6,8 +6,8 @@ import { key,resourcesPath } from "./environment.ts";
 import "./Thumb.css"
 import { BufferChangeInfo } from 'dwt/dist/types/WebTwain.Util';
 export default function Thumb() {
-    let DWObject = useRef<WebTwain | null>(null);
-    const galleryRef = useRef<HTMLDivElement>(null);
+    let DWObject = useRef<WebTwain>(null!);
+    const galleryRef = useRef<HTMLDivElement>(null!);
     let imageEditor: ImageEditor;
     const containerId = "dwtcontrolContainer"
     const [imageMapList, setImageMapList] = useState<Array<{
@@ -88,8 +88,7 @@ export default function Thumb() {
                         for (let k = 0; k < removedItems.length; k++) {
                             newMap = newMap.filter(item => item.imageID !== removedItems[k].imageID);
                         }
-                        prevImageMapList = newMap;
-                        return prevImageMapList.map((item, i) => {
+                        return newMap.map((item, i) => {
                             if (i === currentIndex) {
                                 return { ...item,isCurrentSelect:true};
                             } else {
@@ -127,7 +126,7 @@ export default function Thumb() {
             })
         }
     }
-    function thumbGotoPage(index) {
+    function thumbGotoPage(index:number) {
         const dwtImageList = galleryRef.current.querySelectorAll(".dwtImg")
         // console.log("thumbGotoPage",DWObject.current.CurrentImageIndexInBuffer)
         dwtImageList[index]?.scrollIntoView({
@@ -168,14 +167,14 @@ export default function Thumb() {
         })
         DWObject.current.SaveAllAsPDF("temp.pdf", () => { }, () => { })
     }
-    function remove(index)
+    function remove(index:number)
     {
         DWObject.current.RemoveImage(index)
     }
     function rotateCurrent() {
         DWObject.current.RotateRight(DWObject.current.CurrentImageIndexInBuffer,()=>{},()=>{})
     }
-    function highlightImg(index) {
+    function highlightImg(index:number) {
         setImageMapList((prevImageMapList)=>{
             return prevImageMapList.map((item, i) => {
                 if (i === index) {
@@ -187,7 +186,7 @@ export default function Thumb() {
         })
     }
 
-    function seperateDoc(index) {
+    function seperateDoc(index:number) {
         setImageMapList((prevImageMapList)=>{
             return prevImageMapList.map((item, i) => {
                 if (i === index) {
@@ -198,7 +197,7 @@ export default function Thumb() {
             })
         })
     }
-    function gotoPage(index)
+    function gotoPage(index:number)
     {
         DWObject.current.Viewer.gotoPage(index)
     }

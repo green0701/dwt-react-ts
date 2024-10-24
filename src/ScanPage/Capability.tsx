@@ -1,12 +1,12 @@
 import React, { ChangeEvent, useEffect, useRef, useState } from 'react'
 import Dynamsoft from 'dwt'
 import { WebTwain } from 'dwt/dist/types/WebTwain'
-import { key,resourcesPath } from "./environment.ts";
+import { key, resourcesPath } from "./environment.ts";
 import "./Capability.css"
-import { Capabilities, CapabilityDetails, CapabilitySetup, Device, ValueAndLabel } from 'dwt/dist/types/WebTwain.Acquire';
+import { Capabilities, CapabilityDetails, CapabilitySetup, Device, Frame, ValueAndLabel } from 'dwt/dist/types/WebTwain.Acquire';
 import { DynamsoftEnumsDWT } from 'dwt/dist/types/Dynamsoft.Enum';
 export default function Capability() {
-    let DWObject = useRef<WebTwain | null>(null);
+    let DWObject = useRef<WebTwain>(null!);
     const containerId = "dwtcontrolContainer"
     let canvas: HTMLCanvasElement
     enum SetCapKey {
@@ -20,24 +20,24 @@ export default function Capability() {
         YELLOW = "yellow",
     }
     interface State {
-        modifyCapSetUps?: CapabilitySetup[];
-        currentCapabilityList?: CapabilityDetails[]; // 
-        isSearch?: boolean;
-        capStatus?: CapStatus,
-        findCapabilityList?: number[]
+        modifyCapSetUps: CapabilitySetup[];
+        currentCapabilityList: CapabilityDetails[]; // 
+        isSearch: boolean;
+        capStatus: CapStatus,
+        findCapabilityList: number[]
         inputAddCap?: number,
-        isGetSpecificCap?: boolean,
+        isGetSpecificCap: boolean,
     }
     interface SearchState {
-        searchStr?: string;
+        searchStr: string;
     }
     interface DeviceState {
-        deviceList?: Device[];
-        selectSourceIndex?: number;
-        currenSourceName?: string;
-        nomalDevice?: boolean;
-        esclDevice?: boolean;
-        ifShowUI?: boolean,
+        deviceList: Device[];
+        selectSourceIndex: number;
+        currenSourceName: string;
+        nomalDevice: boolean;
+        esclDevice: boolean;
+        ifShowUI: boolean,
     }
     let [state, setState] = useState<State>({
         modifyCapSetUps: [], //modify capability list
@@ -62,7 +62,7 @@ export default function Capability() {
         isShow: false,
         displayContent: "waiting",
     })
-    function readActualValueForCap(v) {
+    function readActualValueForCap(v: any) {
         //get value or return self
         let setValue = undefined
         if (typeof v === 'object' && v !== null && v.hasOwnProperty('value')) {
@@ -161,10 +161,10 @@ export default function Capability() {
     function handleDeviceTypeChange(e: ChangeEvent<HTMLInputElement>) {
         const { name, checked } = e.target;
         console.log(1)
-        deviceState[name] = checked;
+        // deviceState[name] = checked;
         let deviceTypeValue = 0;
         if (deviceState.nomalDevice) {
-            deviceTypeValue |= 0x10 | 0x20 | 0x40 | 0x80 | 0x100; 
+            deviceTypeValue |= 0x10 | 0x20 | 0x40 | 0x80 | 0x100;
         }
         if (deviceState.esclDevice) {
             deviceTypeValue |= 0x200 | 0x400;
@@ -190,17 +190,17 @@ export default function Capability() {
         }
         );
     }
-    function getCapBySpecificID(capID) {
-        DWObject.current.getCapabilities([],()=>{},()=>{})
+    function getCapBySpecificID(capID: any) {
+        DWObject.current.getCapabilities([], () => { }, () => { })
     }
-    function getCaps(capList) {
+    function getCaps(capList: any) {
         DWObject.current.SelectDeviceAsync(deviceState.deviceList[deviceState.selectSourceIndex]).then(() => {
             setLoadingBarState((preState) => {
                 preState.isShow = true;
                 preState.displayContent = "getCapabilities";
                 return { ...preState }
             });
-            let successCallback=(cap) => {
+            let successCallback = (cap: CapabilityDetails[]) => {
                 (window as any).currentCapList = cap
                 console.log(cap)
                 setLoadingBarState((preState) => {
@@ -211,7 +211,7 @@ export default function Capability() {
                     return { ...preState, currentCapabilityList: cap, capStatus: CapStatus.GRAY }
                 })
             }
-            let failCallback=(c, s) => {
+            let failCallback = (c: number, s: string) => {
                 setLoadingBarState((preState) => {
                     preState.isShow = false;
                     return { ...preState }
@@ -221,13 +221,11 @@ export default function Capability() {
                 })
                 console.error(c, s)
             }
-            if(capList)
-            {
-                DWObject.current.getCapabilities(capList,successCallback,failCallback)
+            if (capList) {
+                DWObject.current.getCapabilities(capList, successCallback, failCallback)
             }
-            else
-            {
-                DWObject.current.getCapabilities(successCallback,failCallback)
+            else {
+                DWObject.current.getCapabilities(successCallback, failCallback)
             }
         }).catch(e => console.error(e))
     }
@@ -271,11 +269,11 @@ export default function Capability() {
         })
     }
     function addModifyCapability(capDetail: CapabilityDetails, key: SetCapKey, value: any) {
-        console.log(capDetail, value)
-
+        console.log(capDetail, key, value)
+        console.log(state.currentCapabilityList)
         setState(prevState => {
             let cap: CapabilitySetup = {
-                capability: capDetail.capability.value,
+                capability: capDetail.capability.value as number,
                 [key]: value
             };
             let found = false;
@@ -295,7 +293,7 @@ export default function Capability() {
 
     }
     function handleFrameCapability(e: ChangeEvent<HTMLInputElement>, capDetail: CapabilityDetails) {
-        let inputs = e.target.parentElement.getElementsByTagName("input")
+        let inputs = (e.target.parentElement as HTMLElement).getElementsByTagName("input")
         let setValue = {
             left: Number(inputs[0].value),
             top: Number(inputs[1].value),
@@ -312,18 +310,16 @@ export default function Capability() {
             value = max;
         }
         e.target.value = value.toString();
-        if (e.target.nextSibling) 
-        {
-            e.target.nextSibling["value"] = value.toString();
+        if (e.target.nextSibling) {
+            (e.target.nextSibling as HTMLInputElement)["value"] = value.toString();
         }
         else if (e.target.previousSibling) {
-            e.target.previousSibling["value"] = value.toString();
+            (e.target.previousSibling as HTMLInputElement)["value"] = value.toString();
         }
         addModifyCapability(capDetail, SetCapKey.curValue, value);
     }
     function generateSettingUI(capDetail: CapabilityDetails) {
-        if(capDetail?.query==undefined)
-        {
+        if (capDetail?.query == undefined) {
             return <td>cant read query</td>
         }
         if (capDetail?.query?.indexOf("set") != -1) {
@@ -372,17 +368,17 @@ export default function Capability() {
                                 <option value={false.toString()}>false</option>
                             </select></td>
                     case 8:
-                        return <td>left:<input defaultValue={readActualValueForCap(capDetail?.curValue["left"])} type='number' onChange={(e) => {
+                        return <td>left:<input defaultValue={readActualValueForCap((capDetail?.curValue as Frame)["left"])} type='number' onChange={(e) => {
                             handleFrameCapability(e, capDetail)
                         }} />,
-                            top:<input type='number' defaultValue={readActualValueForCap(capDetail?.curValue["top"])}
+                            top:<input type='number' defaultValue={readActualValueForCap((capDetail?.curValue as Frame)["top"])}
                                 onChange={(e) => {
                                     handleFrameCapability(e, capDetail)
                                 }} />,
-                            right:<input type='number' defaultValue={readActualValueForCap(capDetail?.curValue["right"])} onChange={(e) => {
+                            right:<input type='number' defaultValue={readActualValueForCap((capDetail?.curValue as Frame)["right"])} onChange={(e) => {
                                 handleFrameCapability(e, capDetail)
                             }} />,
-                            bottom:<input type='number' defaultValue={readActualValueForCap(capDetail?.curValue["bottom"])} onChange={(e) => {
+                            bottom:<input type='number' defaultValue={readActualValueForCap((capDetail?.curValue as Frame)["bottom"])} onChange={(e) => {
                                 handleFrameCapability(e, capDetail)
                             }} /></td>
                     case 9:
@@ -400,15 +396,13 @@ export default function Capability() {
             else if (capDetail?.conType?.value == 3) {
                 //TWON_ARRAY
                 return <td><input type="text" defaultValue={JSON.stringify(capDetail?.values)} onChange={(e) => {
-                    try
-                    {
+                    try {
                         addModifyCapability(capDetail, SetCapKey.values, JSON.parse(e.target.value))
                     }
-                    catch(e)
-                    {
-                        
+                    catch (e) {
+
                     }
-                    
+
                 }} /></td>
             }
             else if (capDetail?.conType?.value == 4) {
@@ -419,10 +413,10 @@ export default function Capability() {
                 let currentIndex = capDetail?.curIndex
                 return <td>
                     <select defaultValue={currentIndex} onChange={(e) => {
-                        let selectValue = values[e.target.selectedIndex]
+                        let selectValue = (values as any[])[e.target.selectedIndex]
                         addModifyCapability(capDetail, SetCapKey.curValue, readActualValueForCap(selectValue))
                     }}>{
-                            values.map((v, index) => {
+                            (values as any[]).map((v, index) => {
                                 let type = typeof v
                                 if (type == "object") {
                                     if (v["label"]) //v as ValueAndLabel
@@ -514,24 +508,24 @@ export default function Capability() {
                 {
                     state.isGetSpecificCap ? (
                         <div className=''>
-                            
+
                             SpecificCapList: {state.findCapabilityList.length > 0 ? (
-                                    state.findCapabilityList.map((cap, index) => (
-                                        <span className='capSpan' key={index}>
-                                            <label>{cap}</label>
-                                            <button onClick={() => {
-                                                setState(prevState => ({
-                                                    ...prevState,
-                                                    findCapabilityList: prevState.findCapabilityList.filter((_, i) => i !== index)
-                                                }));
-                                            }}>X</button>
-                                        </span>
-                                    ))
-                                ) : <span color='brown'>Empty Capability</span>}
-                            <button onClick={()=>{
+                                state.findCapabilityList.map((cap, index) => (
+                                    <span className='capSpan' key={index}>
+                                        <label>{cap}</label>
+                                        <button onClick={() => {
+                                            setState(prevState => ({
+                                                ...prevState,
+                                                findCapabilityList: prevState.findCapabilityList.filter((_, i) => i !== index)
+                                            }));
+                                        }}>X</button>
+                                    </span>
+                                ))
+                            ) : <span color='brown'>Empty Capability</span>}
+                            <button onClick={() => {
                                 getCaps(state.findCapabilityList)
-                                setState((preState)=>{
-                                    return {...preState,isGetSpecificCap:false}
+                                setState((preState) => {
+                                    return { ...preState, isGetSpecificCap: false }
                                 })
                             }}>Get</button>
                             <br></br>
@@ -542,19 +536,22 @@ export default function Capability() {
                                     });
                                 }}></input>
                                 <datalist id='options'>
-                                    {Object.keys(Dynamsoft.DWT.EnumDWT_Cap).filter(cap => {
-                                        return Dynamsoft.DWT.EnumDWT_Cap[cap] != Dynamsoft.DWT.EnumDWT_Cap.CAP_NONE
-                                    }).map(cap => (
-                                        <option key={cap} value={Dynamsoft.DWT.EnumDWT_Cap[cap]}>
-                                            {cap}:{Dynamsoft.DWT.EnumDWT_Cap[cap]}
-                                        </option>
-                                    ))}
+                                    {Object.keys(Dynamsoft.DWT.EnumDWT_Cap)
+                                        .filter((cap) => Dynamsoft.DWT.EnumDWT_Cap[cap as keyof typeof Dynamsoft.DWT.EnumDWT_Cap] !== Dynamsoft.DWT.EnumDWT_Cap.CAP_NONE)
+                                        .map((cap) => {
+                                            const value = Dynamsoft.DWT.EnumDWT_Cap[cap as keyof typeof Dynamsoft.DWT.EnumDWT_Cap];
+                                            return (
+                                                <option key={cap} value={value}>
+                                                    {cap}: {value}
+                                                </option>
+                                            );
+                                        })}
                                 </datalist>
                                 <button onClick={() => {
                                     setState(prevState => {
                                         return {
                                             ...prevState,
-                                            findCapabilityList: [...prevState.findCapabilityList, state.inputAddCap]
+                                            findCapabilityList: [...prevState.findCapabilityList, state.inputAddCap as number]
                                         }
                                     });
                                 }}>add</button>
@@ -587,7 +584,10 @@ export default function Capability() {
                             <tbody>
                                 {
                                     state.currentCapabilityList.filter((item) => {
-                                        return item.capability.label?.toUpperCase().indexOf(searchState.searchStr) != -1 || item.capability.value?.toString().toUpperCase().indexOf(searchState.searchStr) != -1
+                                        const isModifyItem = state.modifyCapSetUps.some((r) => {
+                                            return r.capability == item.capability.value
+                                        })
+                                        return item.capability.label?.toUpperCase().indexOf(searchState.searchStr) != -1 || item.capability.value?.toString().toUpperCase().indexOf(searchState.searchStr) != -1 || isModifyItem
                                     }).map((item) => {
                                         const filteredIndex = state.currentCapabilityList.findIndex((listItem) => listItem === item);
                                         return (

@@ -9,7 +9,7 @@ export default function StartScan() {
         deviceList: Device[],
         selectedDeviceIndex: number,
     }
-    const DWObjectRef = useRef<WebTwain | null>(null);
+    const DWObjectRef = useRef<WebTwain>(null!);
     const containerId = "dwtcontrolContainer"
     const [state, setState] = useState<DWTState>({
         deviceList: [],

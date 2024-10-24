@@ -9,7 +9,7 @@ export default function DWTStorage() {
         storageList:string[],
         currentStorage:string,
     }
-    let DWObject = useRef<WebTwain | null>(null);
+    let DWObject = useRef<WebTwain>(null!);
     let imageEditor: ImageEditor;
     const containerId = "dwtcontrolContainer"
     let canvas: HTMLCanvasElement
@@ -44,12 +44,12 @@ export default function DWTStorage() {
             }
             else
             {
-                await DWObject.current.loadFromLocalStorage({uid:curStorageInfo.curstorage})
+                await DWObject.current.loadFromLocalStorage({uid:curStorageInfo.curstorage as string})
             }
             (window as any).DWObject = DWObject.current;
             DWObject.current.RegisterEvent("OnBufferChanged",(info:BufferChangeInfo)=>{
                 console.log("OnBufferChanged")
-                DWObject.current.saveToLocalStorage({ uid: curStorageInfo.curstorage });
+                DWObject.current.saveToLocalStorage({ uid: curStorageInfo.curstorage as string});
             })
         });
         Dynamsoft.DWT.OnWebTwainError = (e) => {
@@ -66,7 +66,7 @@ export default function DWTStorage() {
     async function syncDatabase()
     {
         let oldLs=localStorage.getItem("dwtStorageList")
-        let storeList:Array<string>=JSON.parse(oldLs) 
+        let storeList:Array<string>=JSON.parse(oldLs as string) 
         let curstorage=localStorage.getItem("currentStorage")
         let existList=[]
         for(let i=0;i<storeList.length;i++)
@@ -80,10 +80,10 @@ export default function DWTStorage() {
                 }
             }
         }
-        let currentExist=await DWObject.current.localStorageExist(curstorage)
+        let currentExist=await DWObject.current.localStorageExist(curstorage as string)
         if(currentExist)
         {
-            if(existList.indexOf(curstorage)==-1)
+            if(existList.indexOf(curstorage as string)==-1)
             {
                 existList.push(curstorage)
             }
@@ -99,8 +99,8 @@ export default function DWTStorage() {
             localStorage.setItem("dwtStorageList",ls)
         }
         setStorageInfo({
-            storageList:existList,
-            currentStorage:curstorage
+            storageList:existList as string[],
+            currentStorage:curstorage as string
         })
         return {
             storeList:existList,
@@ -144,7 +144,6 @@ export default function DWTStorage() {
 
     return (
         <>
-            <input type='text' placeholder=''></input>
             <button onClick={() => {removeCurrentStorage()}}>RemoveLocalStorage</button>
             <button onClick={() => { acquireImage() }}>Scan</button>
             <button onClick={() => { showImageEditor() }}>showImageEditor</button>
