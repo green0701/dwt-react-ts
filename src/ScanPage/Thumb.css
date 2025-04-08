@@ -1,0 +1,74 @@
+.dwtContainer {
+    height: 600px;
+    background-color: #dadada;
+    display: flex;
+}
+
+.gallery {
+    display: flex;
+    flex-wrap: wrap;
+    overflow-y: scroll;
+    width: 200px;
+    /* background-color: honeydew; */
+}
+
+img.highlightImg {
+    background-color: aquamarine;
+}
+
+.dwtImgContainer {
+    position: relative;
+    width: 172px;
+    height: 33%;
+    margin: 5px;
+}
+
+.dwtImg {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    object-position: center;
+}
+.dwtImg:hover {
+    border: 1px solid blue;
+}
+.currentImg
+{
+    background-color: antiquewhite;
+}
+
+.seperate::after {
+    content: '';
+    position: absolute;
+    bottom: -5px;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background-color: black;
+}
+.loading {
+    position: relative;
+    width: 172px;
+    height: 33%;
+    margin: 5px;
+    background-color: rgba(255, 255, 255, 0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.loading::after {
+    content: '';
+    display: block;
+    width: 20px;
+    height: 20px;
+    border: 2px solid #ccc;
+    border-top: 2px solid #333;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}

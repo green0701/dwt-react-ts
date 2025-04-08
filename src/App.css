@@ -1,0 +1,28 @@
+.titleSpan{
+  background-color: #8e8e8e;
+  color: white;
+  padding: 10px;
+  display: flex;
+  justify-content: center;
+}
+
+.titleSpan button
+{
+  font-size: 24px;
+  background-color:transparent;
+  color: #d7d7d7;
+  border: none;
+  outline:none;
+  margin-right: 10px;
+  cursor:pointer;
+}
+.titleSpan button:hover
+{
+  color: white;
+  
+}
+
+.titleSpan .titleSpanSelect{
+  background-color: #9d9d9d;
+  color: white;
+}
