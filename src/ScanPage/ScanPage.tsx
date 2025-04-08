@@ -43,9 +43,6 @@ export default function ScanPage() {
                 Height: 500
             },
         ];
-        document.body.addEventListener("abc", (e) => {
-            
-        })
         Dynamsoft.DWT.RegisterEvent("OnWebTwainReady", () => {
             DWObjectRef.current = Dynamsoft.DWT.GetWebTwain("dwtObject");
             (window as any).DWObject = DWObjectRef.current; //for debugging
