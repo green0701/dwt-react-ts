@@ -98,6 +98,9 @@ export default function ScanPage() {
         //         renderGrayscale: true,
         //     }
         // })
+        // let r= DWObjectRef.current.Viewer.getVisiblePagesInfo()
+        // let th= DWObjectRef.current.Viewer.createThumbnailViewer({})
+        
         DWObjectRef.current.LoadImageEx("", 5, async () => {
             console.log("bitdepth", DWObjectRef.current.GetImageBitDepth(DWObjectRef.current.CurrentImageIndexInBuffer))
             console.log("width", DWObjectRef.current.GetImageWidth(DWObjectRef.current.CurrentImageIndexInBuffer))
