@@ -39,7 +39,8 @@ export default function DWTStorage() {
             {
                 let uid=await DWObject.current.createLocalStorage()
                 localStorage.setItem("currentStorage",uid)
-                localStorage.setItem("dwtStorageList",JSON.stringify(curStorageInfo.storeList.push(uid)))
+                curStorageInfo.storeList.push(uid)
+                localStorage.setItem("dwtStorageList", JSON.stringify(curStorageInfo.storeList))
                 curStorageInfo=await syncDatabase()
             }
             else
@@ -63,50 +64,47 @@ export default function DWTStorage() {
         }
     }, [])
 
-    async function syncDatabase()
-    {
-        let oldLs=localStorage.getItem("dwtStorageList")
-        let storeList:Array<string>=JSON.parse(oldLs as string) 
-        let curstorage=localStorage.getItem("currentStorage")
-        let existList=[]
-        for(let i=0;i<storeList.length;i++)
-        {
-            if(DWObject.current)
-            {
-               let exist=await DWObject.current.localStorageExist(storeList[i])
-               if(exist)
-                {
-                    existList.push(storeList[i])
-                }
+  async function syncDatabase() {
+    let oldLs = localStorage.getItem("dwtStorageList")
+    let storeList: Array<string> = JSON.parse(oldLs || "[]") 
+    let curstorage = localStorage.getItem("currentStorage") || ""
+    let existList: string[] = []
+
+    for (let i = 0; i < storeList.length; i++) {
+        if (DWObject.current) {
+            let exist = await DWObject.current.localStorageExist(storeList[i])
+            if (exist) {
+                existList.push(storeList[i])
             }
-        }
-        let currentExist=await DWObject.current.localStorageExist(curstorage as string)
-        if(currentExist)
-        {
-            if(existList.indexOf(curstorage as string)==-1)
-            {
-                existList.push(curstorage)
-            }
-        }
-        else
-        {
-            curstorage=""
-            localStorage.setItem("currentStorage",curstorage)
-        }
-        const ls=JSON.stringify(existList)
-        if(oldLs!=ls)
-        {
-            localStorage.setItem("dwtStorageList",ls)
-        }
-        setStorageInfo({
-            storageList:existList as string[],
-            currentStorage:curstorage as string
-        })
-        return {
-            storeList:existList,
-            curstorage
         }
     }
+
+    let currentExist = curstorage && await DWObject.current.localStorageExist(curstorage)
+    if (currentExist) {
+        if (!existList.includes(curstorage)) {
+            existList.push(curstorage)
+        }
+    } else {
+        curstorage = ""
+        localStorage.setItem("currentStorage", curstorage)
+    }
+
+    const ls = JSON.stringify(existList)
+    if (oldLs !== ls) {
+        localStorage.setItem("dwtStorageList", ls)
+    }
+
+    setStorageInfo({
+        storageList: existList,
+        currentStorage: curstorage
+    })
+
+    return {
+        storeList: existList,
+        curstorage
+    }
+}
+
 
     async function acquireImage() {
         if (DWObject) {
